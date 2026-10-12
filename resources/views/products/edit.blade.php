@@ -11,6 +11,11 @@
         @method('PUT')
 
         <div>
+            <label for="sku">SKU / Kode Produk</label>
+            <input type="text" id="sku" name="sku" value="{{ old('sku', $product->sku) }}" maxlength="50" required>
+            @error('sku')<p>{{ $message }}</p>@enderror
+        </div>
+        <div>
             <label for="name">Nama Produk</label>
             <input
                 type="text"
@@ -44,6 +49,16 @@
             @enderror
         </div>
 
+        <div>
+            <label for="supplier_id">Pemasok</label>
+            <select id="supplier_id" name="supplier_id">
+                <option value="">Tidak ada pemasok</option>
+                @foreach ($suppliers as $supplier)
+                    <option value="{{ $supplier->id }}" {{ old('supplier_id', $product->supplier_id) == $supplier->id ? 'selected' : '' }}>{{ $supplier->name }}</option>
+                @endforeach
+            </select>
+            @error('supplier_id')<p>{{ $message }}</p>@enderror
+        </div>
         <div>
             <label for="price">Harga</label>
             <input

@@ -1,143 +1,66 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Inventory Management System — P5 Laravel
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
-# Inventory Management System
+Proyek P5 adalah pemindahan dan perapian Inventory Management System P4 (PHP Native) ke Laravel. Business logic yang dipertahankan mencakup produk, kategori, pemasok, pengguna dengan peran admin/staff, transaksi stok masuk/keluar, dashboard, dan laporan.
 
-Aplikasi manajemen inventaris berbasis Laravel dan MySQL untuk mengelola data produk dan kategori.
+## Menjalankan secara lokal
+1. Buka folder proyek ini di VS Code.
+2. Untuk mempertahankan koneksi dan data P5, salin file `.env` dari proyek Laravel P5 lama ke folder ini. Jangan mengganti nilai `DB_DATABASE` jika ingin tetap menggunakan database P5 yang sama. Jika tidak memiliki `.env`, salin `.env.example` menjadi `.env` lalu atur database secara manual.
+3. Jalankan `composer install`.
+4. Jalankan `php artisan key:generate` hanya jika `APP_KEY` di `.env` masih kosong.
+5. Cadangkan database terlebih dahulu, lalu jalankan `php artisan migrate` untuk menambahkan struktur yang dibutuhkan. Perintah ini tidak menghapus tabel/data yang sudah ada.
+6. Jalankan `php artisan db:seed --class=AdminUserSeeder` jika perlu membuat akun admin demo. Seeder tidak mengubah akun yang emailnya sudah ada.
+7. Jalankan `php artisan serve --host=127.0.0.1 --port=8080`, lalu buka http://127.0.0.1:8080.
 
-## Fitur Aplikasi
+## Akun pengujian
+- Username: `admin`
+- Email: `admin@inventory.test`
+- Password: `Admin123!`
 
-- Menampilkan daftar produk
-- Menambah produk
-- Melihat detail produk
-- Mengedit produk
-- Menghapus produk
-- Mencari produk berdasarkan nama
-- Memfilter produk berdasarkan kategori
-- Pagination
-- Validasi formulir
+Ganti kata sandi ini sebelum aplikasi digunakan bersama orang lain.
 
-## Teknologi
+## Menggunakan MySQL (opsional)
+Buat database baru khusus Laravel, misalnya `inventory_laravel`, lalu ubah `DB_CONNECTION=mysql`, `DB_HOST=127.0.0.1`, `DB_PORT=3306`, `DB_DATABASE=inventory_laravel`, `DB_USERNAME`, dan `DB_PASSWORD` di `.env`. Jangan arahkan aplikasi ke database P4/`inventory_app` sebelum backup dan pemetaan data selesai.
 
-- PHP
-- Laravel
-- MySQL
-- Blade
-- HTML dan CSS
-
-## Cara Menjalankan Proyek
-
-### 1. Instal dependensi
-
-```bash
-composer install
-```
-
-### 2. Konfigurasi database
-
-Pastikan file `.env` tersedia dan sesuaikan konfigurasi database:
-
-```env
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=inventory_db
-DB_USERNAME=root
-DB_PASSWORD=
-```
-
-Sesuaikan username dan password dengan konfigurasi MySQL lokal.
-
-### 3. Siapkan application key
-
-Jika application key belum tersedia, jalankan:
-
-```bash
-php artisan key:generate
-```
-
-### 4. Jalankan migration
-
-Pastikan database `inventory_db` sudah dibuat terlebih dahulu.
-
-```bash
-php artisan migrate
-```
-
-### 5. Jalankan seeder
-
-```bash
-php artisan db:seed --class=DatabaseSeeder
-```
-
-### 6. Jalankan aplikasi
-
-```bash
-php artisan serve --host=127.0.0.1 --port=8080
-```
-
-Buka aplikasi melalui:
-
-http://127.0.0.1:8080
-
+## Catatan penting migrasi
+Migrasi Laravel mengatur struktur tabel, bukan menyalin otomatis isi database P4. Data lama tetap harus dipetakan dan diimpor secara terencana. Buat salinan cadangan file SQLite atau ekspor database MySQL sebelum migrasi. Jangan menjalankan `php artisan migrate:fresh` atau menghapus `database/database.sqlite` jika ada data yang ingin dipertahankan.
 ## Arsitektur MVC
 
-- **Model:** mengelola data produk dan kategori melalui Eloquent.
-- **View:** menampilkan antarmuka menggunakan Blade.
-- **Controller:** menangani permintaan pengguna, validasi, dan operasi CRUD.
+Project ini menggunakan pola Model–View–Controller (MVC) yang disediakan Laravel.
 
-## About Laravel
+- **Model:** merepresentasikan data dan berinteraksi dengan database, misalnya model produk dan kategori.
+- **View:** menggunakan Blade Template Engine untuk menampilkan halaman, formulir, tabel, dan pesan validasi kepada pengguna.
+- **Controller:** menerima request dari pengguna, memvalidasi input, memproses operasi aplikasi melalui model, dan mengembalikan view atau redirect.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Alur request dimulai dari `routes/web.php`, diteruskan ke controller, kemudian controller berinteraksi dengan model jika diperlukan. Hasilnya ditampilkan melalui Blade View atau pengguna diarahkan ke halaman lain.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Migration dan Seeder
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **Migration:** mengelola perubahan struktur tabel database secara terkontrol melalui file di `database/migrations/`.
+- **Seeder:** memasukkan data awal atau akun pengujian melalui file di `database/seeders/`.
+- **Pencadangan:** lakukan backup database sebelum menjalankan perubahan struktur. Gunakan database khusus pengujian ketika mencoba instalasi dari awal.
 
-## Learning Laravel
+## Pengujian CRUD dan Validasi
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+Alur pengujian penambahan produk:
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+1. Pengguna membuka halaman produk dan memilih form tambah produk.
+2. Pengguna mengisi form. Input yang tidak valid harus ditolak dan pesan validasi ditampilkan.
+3. Pengguna memperbaiki input dan mengirim form kembali.
+4. Controller memvalidasi data dan menyimpannya melalui model.
+5. Aplikasi melakukan redirect setelah penyimpanan berhasil.
+6. Produk yang baru ditambahkan tampil pada halaman daftar produk.
 
-## Laravel Sponsors
+Pengujian juga mencakup pembaruan dan penghapusan data, kategori, supplier, transaksi stok, laporan, serta pembatasan akses berdasarkan peran pengguna.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## Bukti Screenshot
 
-### Premium Partners
+Screenshot pengujian disimpan dalam folder `screenshots/`.
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+- (screenshoot/screenshots/screenshots01-route-list.png)(screenshoot/screenshots/screenshots01-route-list.png) — daftar route Laravel.
+- (screenshoot/screenshots/02-crud-produk.png) — halaman daftar dan form produk.
+- (screenshoot/screenshots/03-blade-view.png) — contoh kode Blade View.
+-(screenshoot/screenshots/04c-data-tersimpan.png)
+(screenshoot/screenshots/04b-validasi.png)
+(screenshoot/screenshots/04a-form-produk.png) — bukti validasi, penyimpanan, redirect, dan data yang tampil.
 
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Nama file di atas merupakan format yang disarankan. Pastikan setiap screenshot diambil dari aplikasi dan source code proyek ini.

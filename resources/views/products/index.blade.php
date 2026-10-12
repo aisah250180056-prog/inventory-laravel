@@ -44,8 +44,10 @@
         <thead>
             <tr>
                 <th>No</th>
+                <th>SKU</th>
                 <th>Nama Produk</th>
                 <th>Kategori</th>
+                <th>Pemasok</th>
                 <th>Harga</th>
                 <th>Stok</th>
                 <th>Aksi</th>
@@ -56,8 +58,10 @@
             @forelse ($products as $product)
                 <tr>
                     <td>{{ $products->firstItem() + $loop->index }}</td>
+                    <td>{{ $product->sku ?? '-' }}</td>
                     <td>{{ $product->name }}</td>
-                    <td>{{ $product->category->name }}</td>
+                    <td>{{ $product->category?->name ?? '-' }}</td>
+                    <td>{{ $product->supplier?->name ?? '-' }}</td>
                     <td>Rp {{ number_format($product->price, 0, ',', '.') }}</td>
                     <td>{{ $product->stock }}</td>
                     <td>
@@ -79,7 +83,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="6">Produk tidak ditemukan.</td>
+                    <td colspan="8">Produk tidak ditemukan.</td>
                 </tr>
             @endforelse
         </tbody>
