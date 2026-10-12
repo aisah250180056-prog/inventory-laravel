@@ -6,6 +6,90 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
+# Inventory Management System
+
+Aplikasi manajemen inventaris berbasis Laravel dan MySQL untuk mengelola data produk dan kategori.
+
+## Fitur Aplikasi
+
+- Menampilkan daftar produk
+- Menambah produk
+- Melihat detail produk
+- Mengedit produk
+- Menghapus produk
+- Mencari produk berdasarkan nama
+- Memfilter produk berdasarkan kategori
+- Pagination
+- Validasi formulir
+
+## Teknologi
+
+- PHP
+- Laravel
+- MySQL
+- Blade
+- HTML dan CSS
+
+## Cara Menjalankan Proyek
+
+### 1. Instal dependensi
+
+```bash
+composer install
+```
+
+### 2. Konfigurasi database
+
+Pastikan file `.env` tersedia dan sesuaikan konfigurasi database:
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=inventory_db
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+Sesuaikan username dan password dengan konfigurasi MySQL lokal.
+
+### 3. Siapkan application key
+
+Jika application key belum tersedia, jalankan:
+
+```bash
+php artisan key:generate
+```
+
+### 4. Jalankan migration
+
+Pastikan database `inventory_db` sudah dibuat terlebih dahulu.
+
+```bash
+php artisan migrate
+```
+
+### 5. Jalankan seeder
+
+```bash
+php artisan db:seed --class=DatabaseSeeder
+```
+
+### 6. Jalankan aplikasi
+
+```bash
+php artisan serve --host=127.0.0.1 --port=8080
+```
+
+Buka aplikasi melalui:
+
+http://127.0.0.1:8080
+
+## Arsitektur MVC
+
+- **Model:** mengelola data produk dan kategori melalui Eloquent.
+- **View:** menampilkan antarmuka menggunakan Blade.
+- **Controller:** menangani permintaan pengguna, validasi, dan operasi CRUD.
 
 ## About Laravel
 

@@ -1,11 +1,9 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tambah Produk</title>
-</head>
-<body>
+@extends('layouts.app')
+
+@section('title', 'Tambah Produk')
+
+@section('content')
+<div class="container">
     <h1>Tambah Produk</h1>
 
     <form action="{{ route('products.store') }}" method="POST">
@@ -29,6 +27,7 @@
             <label for="category_id">Kategori</label>
             <select id="category_id" name="category_id" required>
                 <option value="">Pilih Kategori</option>
+
                 @foreach ($categories as $category)
                     <option
                         value="{{ $category->id }}"
@@ -38,6 +37,7 @@
                     </option>
                 @endforeach
             </select>
+
             @error('category_id')
                 <p>{{ $message }}</p>
             @enderror
@@ -77,5 +77,5 @@
         <button type="submit">Simpan Produk</button>
         <a href="{{ route('products.index') }}">Kembali</a>
     </form>
-</body>
-</html>
+</div>
+@endsection

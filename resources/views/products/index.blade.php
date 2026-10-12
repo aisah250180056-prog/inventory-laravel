@@ -1,14 +1,19 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daftar Produk</title>
-</head>
-<body>
+@extends('layouts.app')
+
+@section('title', 'Daftar Produk')
+
+@section('content')
+<div class="container">
+
     <h1>Daftar Produk</h1>
 
-    <form method="GET" action="/">
+    @if (session('success'))
+        <p class="success">{{ session('success') }}</p>
+    @endif
+
+    <a href="{{ route('products.create') }}">+ Tambah Produk</a>
+
+    <form method="GET" action="{{ route('products.index') }}">
         <input
             type="text"
             name="search"
@@ -18,6 +23,7 @@
 
         <select name="category_id">
             <option value="">Semua Kategori</option>
+
             @foreach ($categories as $category)
                 <option
                     value="{{ $category->id }}"
@@ -29,7 +35,7 @@
         </select>
 
         <button type="submit">Cari / Filter</button>
-        <a href="/">Reset</a>
+        <a href="{{ route('products.index') }}">Reset</a>
     </form>
 
     <br>
@@ -42,8 +48,10 @@
                 <th>Kategori</th>
                 <th>Harga</th>
                 <th>Stok</th>
+                <th>Aksi</th>
             </tr>
         </thead>
+
         <tbody>
             @forelse ($products as $product)
                 <tr>
@@ -52,16 +60,34 @@
                     <td>{{ $product->category->name }}</td>
                     <td>Rp {{ number_format($product->price, 0, ',', '.') }}</td>
                     <td>{{ $product->stock }}</td>
+                    <td>
+                        <a href="{{ route('products.show', $product->id) }}">Detail</a>
+                        <a href="{{ route('products.edit', $product->id) }}">Edit</a>
+
+                        <form
+                            action="{{ route('products.destroy', $product->id) }}"
+                            method="POST"
+                            style="display: inline;"
+                            onsubmit="return confirm('Yakin ingin menghapus produk ini?')"
+                        >
+                            @csrf
+                            @method('DELETE')
+
+                            <button type="submit">Hapus</button>
+                        </form>
+                    </td>
                 </tr>
             @empty
                 <tr>
-                    <td colspan="5">Produk tidak ditemukan.</td>
+                    <td colspan="6">Produk tidak ditemukan.</td>
                 </tr>
             @endforelse
         </tbody>
     </table>
 
     <br>
+
     {{ $products->links() }}
-</body>
-</html>
+
+</div>
+@endsection
